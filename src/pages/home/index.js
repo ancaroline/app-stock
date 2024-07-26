@@ -7,6 +7,10 @@ export function Home(){
     console.log("clicou")
   }
 
+  function updateStock(){
+    
+  }
+
   return(
       <ImageBackground source={localImage} style={styles.container}>
 
@@ -15,7 +19,7 @@ export function Home(){
         <TouchableOpacity style={styles.button} onPress={checkStock}>
           <Text style={styles.buttonText}>Verificar Estoque</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={updateStock}>
           <Text style={styles.buttonText}>Atualizar Estoque</Text>
         </TouchableOpacity>
       </ImageBackground>
