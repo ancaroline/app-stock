@@ -3,6 +3,8 @@ import { Home } from './pages/home'
 import { StockCheck } from './pages/stockCheck'
 import { StockUpdate } from './pages/stockUpdate'
 
+import { AntDesign } from '@expo/vector-icons';
+
 const Tab = createBottomTabNavigator();
 
 export function Routes(){
@@ -11,14 +13,42 @@ export function Routes(){
             <Tab.Screen
                 name="home"
                 component={Home}
+                options={{
+                    tabBarShowLabel: false,
+                    headerShown: false,
+                    tabBarIcon: ({ focused, size, color }) => {
+                        if(focused){
+                            return <AntDesign name="home" size={24} color="orange" />
+                        }
+                        return <AntDesign name="home" size={24} color="black" />
+                    }                   
+                }}
             />
             <Tab.Screen
-                name="stock check"
+                name="Verificação Completa do Estoque"
                 component={StockCheck}
+                options={{
+                    tabBarShowLabel: false,
+                    tabBarIcon: ({ focused, size, color }) => {
+                        if(focused){
+                            return <AntDesign name="check" size={24} color="orange" />
+                        }
+                        return <AntDesign name="check" size={24} color="black" />
+                    }
+                }}
             />
             <Tab.Screen
-                name="stock update"
+                name="Atualização do Estoque"
                 component={StockUpdate}
+                options={{
+                    tabBarShowLabel: false,
+                    tabBarIcon: ({ focused, size, color }) => {
+                        if(focused){
+                            return <AntDesign name="edit" size={24} color="orange" />
+                        }
+                        return <AntDesign name="edit" size={24} color="black" />
+                    }
+                }}
             />
         </Tab.Navigator>
     )
