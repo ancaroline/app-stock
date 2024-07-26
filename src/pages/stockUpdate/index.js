@@ -1,10 +1,10 @@
 // src/pages/stockUpdate/StockUpdate.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useStock } from '../../contexts/StockContext';
 
 export function StockUpdate() {
-  const { stock, updateStock } = useStock();
+  const { stock, updateStock, removeItem } = useStock();
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
 
@@ -24,6 +24,26 @@ export function StockUpdate() {
     setItemName('');
     setItemQuantity('');
   };
+
+  const handleRemoveItem = (name) => {
+    Alert.alert(
+      'Remover Item',
+      `Tem certeza que deseja remover o item ${name}?`,
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Remover',
+          onPress: () => removeItem(name),
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -47,6 +67,11 @@ export function StockUpdate() {
         renderItem={({ item }) => (
           <View style={styles.item}>
             <Text>{item.name}: {item.quantity}</Text>
+
+            <TouchableOpacity onPress={() => handleRemoveItem(item.name)}>
+              <Text style={styles.removeButton}>Remover</Text>
+            </TouchableOpacity>
+      
           </View>
         )}
       />
@@ -70,4 +95,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
   },
+  removeButton: {
+    color: 'red',
+  }
+
 });

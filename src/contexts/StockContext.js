@@ -1,4 +1,3 @@
-// src/contexts/StockContext.js
 import React, { createContext, useState, useContext } from 'react';
 
 const StockContext = createContext();
@@ -35,8 +34,16 @@ export const StockProvider = ({ children }) => {
     });
   };
 
+  const removeItem = (itemName) => {
+    setStock(prevStock => {
+      return prevStock.filter(item => item.name !== itemName);
+    });
+  };
+  
+
+
   return (
-    <StockContext.Provider value={{ stock, updateStock }}>
+    <StockContext.Provider value={{ stock, updateStock, removeItem }}>
       {children}
     </StockContext.Provider>
   );
