@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet, Alert, TouchableOpacity, Modal } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { useStock } from '../../contexts/StockContext';
 
 export function StockUpdate() {
@@ -7,10 +8,12 @@ export function StockUpdate() {
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
   const [itemPrice, setItemPrice] = useState('');
+  const [itemType, setItemType] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [newQuantity, setNewQuantity] = useState('');
   const [newPrice, setNewPrice] = useState('');
+  const [newType, setNewType] = useState('');
 
   const handleUpdateStock = () => {
     if (!itemName) {
@@ -28,11 +31,17 @@ export function StockUpdate() {
       return;
     }
 
-    updateStock(itemName, itemQuantity, itemPrice);
+    if (!itemType) {
+      Alert.alert('Erro', 'Tipo de item inválido');
+      return;
+    }
+
+    updateStock(itemName, itemQuantity, itemPrice, itemType);
 
     setItemName('');
     setItemQuantity('');
     setItemPrice('');
+    setItemType('');
   };
 
   const handleRemoveItem = (name) => {
@@ -58,6 +67,7 @@ export function StockUpdate() {
     setSelectedItem(item);
     setNewQuantity(item.quantity.toString());
     setNewPrice((item.totalPrice / item.quantity).toFixed(2).toString());
+    setNewType(item.type);
     setModalVisible(true);
   };
 
@@ -73,11 +83,12 @@ export function StockUpdate() {
     }
 
     const quantityChange = parseInt(newQuantity) - selectedItem.quantity;
-    updateStock(selectedItem.name, quantityChange, newPrice);
+    updateStock(selectedItem.name, quantityChange, newPrice, newType);
     setModalVisible(false);
     setSelectedItem(null);
     setNewQuantity('');
     setNewPrice('');
+    setNewType('');
   };
 
   return (
@@ -89,7 +100,7 @@ export function StockUpdate() {
         style={styles.input}
       />
       <TextInput
-        placeholder="Quantidade (positivo para adicionar, negativo para remover)"
+        placeholder="Unidades (positivo para adicionar, negativo para remover)"
         value={itemQuantity}
         onChangeText={setItemQuantity}
         keyboardType="numeric"
@@ -102,13 +113,23 @@ export function StockUpdate() {
         keyboardType="numeric"
         style={styles.input}
       />
+      <Picker
+        selectedValue={itemType}
+        style={styles.input}
+        onValueChange={(itemValue) => setItemType(itemValue)}
+      >
+        <Picker.Item label="Selecionar Tipo" value="" />
+        <Picker.Item label="Cartucho" value="cartucho" />
+        <Picker.Item label="Tinta Colorida" value="tinta colorida" />
+        <Picker.Item label="Agulha" value="agulha" />
+      </Picker>
       <Button title="Atualizar Estoque" onPress={handleUpdateStock} />
       <FlatList
         data={stock}
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Text>{item.name}: {item.quantity} (Total: R$ {item.totalPrice.toFixed(2)})</Text>
+            <Text>{item.name}: ({item.quantity} unidades)</Text>
             <View style={styles.buttons}>
               <TouchableOpacity onPress={() => handleUpdateItem(item)}>
                 <Text style={styles.updateButton}>Atualizar</Text>
@@ -142,6 +163,15 @@ export function StockUpdate() {
                 keyboardType="numeric"
                 style={styles.input}
               />
+              <Picker
+                selectedValue={newType}
+                style={styles.input}
+                onValueChange={(itemValue) => setNewType(itemValue)}
+              >
+                <Picker.Item label="Cartucho" value="cartucho" />
+                <Picker.Item label="Tinta Colorida" value="tinta colorida" />
+                <Picker.Item label="Agulha" value="agulha" />
+              </Picker>
               <View style={styles.modalButtons}>
                 <TouchableOpacity style={[styles.modalButton, styles.saveButton]} onPress={handleSaveQuantity}>
                   <Text style={styles.modalButtonText}>Salvar</Text>

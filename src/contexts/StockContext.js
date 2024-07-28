@@ -34,7 +34,7 @@ export const StockProvider = ({ children }) => {
     saveStock();
   }, [stock]);
 
-  const updateStock = (itemName, itemQuantity, itemPrice) => {
+  const updateStock = (itemName, itemQuantity, itemPrice, itemType) => {
     const quantity = parseInt(itemQuantity);
     const price = parseFloat(itemPrice);
     setStock(prevStock => {
@@ -51,7 +51,7 @@ export const StockProvider = ({ children }) => {
 
         return prevStock.map(item => 
           item.name === itemName 
-            ? { ...item, quantity: newQuantity, totalPrice: newTotalPrice }
+            ? { ...item, quantity: newQuantity, totalPrice: newTotalPrice, type: itemType }
             : item
         );
       } else {
@@ -60,7 +60,7 @@ export const StockProvider = ({ children }) => {
           return prevStock;
         }
 
-        return [...prevStock, { name: itemName, quantity, totalPrice: price * quantity }];
+        return [...prevStock, { name: itemName, quantity, totalPrice: price * quantity, type: itemType }];
       }
     });
   };
