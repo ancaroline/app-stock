@@ -123,7 +123,10 @@ export function StockUpdate() {
         <Picker.Item label="Tinta Colorida" value="tinta colorida" />
         <Picker.Item label="Agulha" value="agulha" />
       </Picker>
-      <Button title="Atualizar Estoque" onPress={handleUpdateStock} />
+      <TouchableOpacity style={styles.updateButtonStock} onPress={handleUpdateStock}>
+        <Text style={styles.updateButtonTextStock}>Atualizar Estoque</Text>
+      </TouchableOpacity>
+      
       <FlatList
         data={stock}
         keyExtractor={(item) => item.name}
@@ -150,7 +153,9 @@ export function StockUpdate() {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
+              
               <Text>Atualizar quantidade de {selectedItem.name}</Text>
+              
               <TextInput
                 value={newQuantity}
                 onChangeText={setNewQuantity}
@@ -241,7 +246,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   saveButton: {
-    backgroundColor: 'orange',
+    backgroundColor: '#D2691E',
     marginRight: 10,
   },
   cancelButton: {
@@ -251,4 +256,20 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
+  updateButtonStock: {
+    padding: 10,
+    borderRadius: 5,
+    justifyContent: 'center',
+    width: '70%',
+    alignItems: 'center',
+    marginBottom: 15,
+    marginLeft: 50,
+    backgroundColor: '#6ED99B'
+  },
+  updateButtonTextStock: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
+    
+  }
 });

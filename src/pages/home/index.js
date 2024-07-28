@@ -13,14 +13,14 @@ export function Home(){
   function checkStock(){
     let criticalItems = stock.filter(item => item.quantity < 10);
     if (criticalItems.length > 0) {
-      let message = 'Itens com estoque crítico:\n';
+      let message = 'Você tem um ou mais itens acabando!\n\n';
       criticalItems.forEach(item => {
         let neededQuantity = 10 - item.quantity;
-        message += `${item.name}: precisa de mais ${neededQuantity} para atingir o nível neutro.\n`;
+        message += `- ${item.name}: Necessário ${neededQuantity} unidade(s) para atingir o nível neutro.\n\n`;
       });
       setStockMessage(message);
     } else {
-      setStockMessage('O estoque está neutro ou saudável.');
+      setStockMessage('Está tudo em ordem.');
     }
     setModalVisible(true);
   }
@@ -94,11 +94,11 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10
+    marginBottom: 10,
   },
   modalMessage: {
     fontSize: 16,
-    marginBottom: 20
+    marginBottom: 20,
   },
   closeButton: {
     backgroundColor: '#D2691E',
