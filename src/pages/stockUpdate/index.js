@@ -6,9 +6,11 @@ export function StockUpdate() {
   const { stock, updateStock, removeItem } = useStock();
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
+  const [itemPrice, setItemPrice] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [newQuantity, setNewQuantity] = useState('');
+  const [newPrice, setNewPrice] = useState('');
 
   const handleUpdateStock = () => {
     if (!itemName) {
@@ -21,10 +23,16 @@ export function StockUpdate() {
       return;
     }
 
-    updateStock(itemName, itemQuantity);
+    if (isNaN(parseFloat(itemPrice))) {
+      Alert.alert('Erro', 'Preço inválido');
+      return;
+    }
+
+    updateStock(itemName, itemQuantity, itemPrice);
 
     setItemName('');
     setItemQuantity('');
+    setItemPrice('');
   };
 
   const handleRemoveItem = (name) => {
@@ -49,6 +57,7 @@ export function StockUpdate() {
   const handleUpdateItem = (item) => {
     setSelectedItem(item);
     setNewQuantity(item.quantity.toString());
+    setNewPrice((item.totalPrice / item.quantity).toFixed(2).toString());
     setModalVisible(true);
   };
 
@@ -57,10 +66,18 @@ export function StockUpdate() {
       Alert.alert('Erro', 'Quantidade inválida');
       return;
     }
-    updateStock(selectedItem.name, newQuantity);
+
+    if (isNaN(parseFloat(newPrice))) {
+      Alert.alert('Erro', 'Preço inválido');
+      return;
+    }
+
+    const quantityChange = parseInt(newQuantity) - selectedItem.quantity;
+    updateStock(selectedItem.name, quantityChange, newPrice);
     setModalVisible(false);
     setSelectedItem(null);
     setNewQuantity('');
+    setNewPrice('');
   };
 
   return (
@@ -78,13 +95,20 @@ export function StockUpdate() {
         keyboardType="numeric"
         style={styles.input}
       />
+      <TextInput
+        placeholder="Preço por Unidade"
+        value={itemPrice}
+        onChangeText={setItemPrice}
+        keyboardType="numeric"
+        style={styles.input}
+      />
       <Button title="Atualizar Estoque" onPress={handleUpdateStock} />
       <FlatList
         data={stock}
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Text>{item.name}: {item.quantity}</Text>
+            <Text>{item.name}: {item.quantity} (Total: R$ {item.totalPrice.toFixed(2)})</Text>
             <View style={styles.buttons}>
               <TouchableOpacity onPress={() => handleUpdateItem(item)}>
                 <Text style={styles.updateButton}>Atualizar</Text>
@@ -109,6 +133,12 @@ export function StockUpdate() {
               <TextInput
                 value={newQuantity}
                 onChangeText={setNewQuantity}
+                keyboardType="numeric"
+                style={styles.input}
+              />
+              <TextInput
+                value={newPrice}
+                onChangeText={setNewPrice}
                 keyboardType="numeric"
                 style={styles.input}
               />

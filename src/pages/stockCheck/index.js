@@ -1,4 +1,3 @@
-// src/pages/stockCheck/StockCheck.js
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import { useStock } from '../../contexts/StockContext';
@@ -7,7 +6,7 @@ export function StockCheck() {
   const { stock } = useStock();
 
   const getStockStatus = (quantity) => {
-    if (quantity > 19) return { status: 'Saudável', color: 'green' };
+    if (quantity > 16) return { status: 'Saudável', color: 'green' };
     if (quantity > 10) return { status: 'Neutro', color: 'gray' };
     return { status: 'Crítico', color: 'red' };
   };

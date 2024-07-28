@@ -10,7 +10,7 @@ export const StockProvider = ({ children }) => {
   const [stock, setStock] = useState([]);
 
   useEffect(() => {
-    async function loadStock(){
+    async function loadStock() {
       try {
         const storedStock = await AsyncStorage.getItem('@stock');
         if (storedStock !== null) {
@@ -34,9 +34,9 @@ export const StockProvider = ({ children }) => {
     saveStock();
   }, [stock]);
 
-
-  const updateStock = (itemName, itemQuantity) => {
+  const updateStock = (itemName, itemQuantity, itemPrice) => {
     const quantity = parseInt(itemQuantity);
+    const price = parseFloat(itemPrice);
     setStock(prevStock => {
       const existingItem = prevStock.find(item => item.name === itemName);
 
@@ -46,9 +46,12 @@ export const StockProvider = ({ children }) => {
           return prevStock;
         }
 
+        const newQuantity = existingItem.quantity + quantity;
+        const newTotalPrice = existingItem.totalPrice + (quantity * price);
+
         return prevStock.map(item => 
           item.name === itemName 
-            ? { ...item, quantity: item.quantity + quantity }
+            ? { ...item, quantity: newQuantity, totalPrice: newTotalPrice }
             : item
         );
       } else {
@@ -57,18 +60,14 @@ export const StockProvider = ({ children }) => {
           return prevStock;
         }
 
-        return [...prevStock, { name: itemName, quantity }];
+        return [...prevStock, { name: itemName, quantity, totalPrice: price * quantity }];
       }
     });
   };
 
   const removeItem = (itemName) => {
-    setStock(prevStock => {
-      return prevStock.filter(item => item.name !== itemName);
-    });
+    setStock(prevStock => prevStock.filter(item => item.name !== itemName));
   };
-  
-
 
   return (
     <StockContext.Provider value={{ stock, updateStock, removeItem }}>
