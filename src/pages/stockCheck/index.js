@@ -5,24 +5,48 @@ import { useStock } from '../../contexts/StockContext';
 export function StockCheck() {
   const { stock } = useStock();
 
-  const getStockStatus = (quantity, type) => {
-    if (type === 'cartucho') {
-      if (quantity >= 17) return { status: 'Saudável', color: 'green' };
-      if (quantity >= 11) return { status: 'Neutro', color: 'gray' };
-      return { status: 'Crítico', color: 'red' };
-    } else if (type === 'tinta colorida') {
-      if (quantity >= 4) return { status: 'Saudável', color: 'green' };
-      if (quantity === 3) return { status: 'Neutro', color: 'gray' };
-      return { status: 'Crítico', color: 'red' };
-    } else if (type === 'agulha') {
-      if (quantity >= 60) return { status: 'Saudável', color: 'green' };
-      if (quantity > 30) return { status: 'Neutro', color: 'gray' };
-      return { status: 'Crítico', color: 'red' };
-    } else {
-      if (quantity > 16) return { status: 'Saudável', color: 'green' };
-      if (quantity > 10) return { status: 'Neutro', color: 'gray' };
-      return { status: 'Crítico', color: 'red' };
+  const getStockStatus = (quantity, type, priceUnit) => {
+    let healthyStock, neutralStock, criticalStock;
+    switch (type) {
+      case 'cartucho':
+        healthyStock = 15;
+        neutralStock = 10;
+        criticalStock = 9;
+        break;
+      case 'tinta colorida':
+        healthyStock = 4;
+        neutralStock = 3;
+        criticalStock = 3;
+        break;
+      case 'agulha':
+        healthyStock = 60;
+        neutralStock = 30;
+        criticalStock = 30;
+        break;
+      default:
+        healthyStock = 17;
+        neutralStock = 11;
+        criticalStock = 8;
+        break;
     }
+
+    let status, color, moneyNeeded = 0;
+    if (quantity >= healthyStock) {
+      status = 'Saudável';
+      color = 'green';
+    } else if (quantity >= neutralStock) {
+      status = 'Neutro';
+      color = 'gray';
+      const quantityNeeded = healthyStock - quantity;
+      moneyNeeded = quantityNeeded * priceUnit;
+    } else {
+      status = 'Crítico';
+      color = 'red';
+      const quantityNeeded = healthyStock - quantity;
+      moneyNeeded = quantityNeeded * priceUnit;
+    }
+
+    return { status, color, moneyNeeded };
   };
 
   return (
@@ -31,14 +55,20 @@ export function StockCheck() {
         data={stock}
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => {
-          const { status, color } = getStockStatus(item.quantity, item.type);
+          const priceUnit = item.totalPrice / item.quantity;
+          const { status, color, moneyNeeded } = getStockStatus(item.quantity, item.type, priceUnit);
           return (
             <View style={[styles.item, { borderColor: color }]}>
-              <Text>{item.name}: {item.quantity} ({status})</Text>
+              <Text>{item.name}: {item.quantity} ({status}) - Total: R$ {item.totalPrice.toFixed(2)}</Text>
+              {moneyNeeded > 0 && (
+                <Text>Precisa de R$ {moneyNeeded.toFixed(2)} para o status Saudável</Text>
+              )}
             </View>
           );
         }}
       />
+      <Text style={styles.textAtention}>Atenção! O status saudável não condiz com o total necessário para o mês.</Text>
+      <Text style={styles.textAtention}>Saudável = 75% do estoque.</Text>
     </View>
   );
 }
@@ -52,8 +82,12 @@ const styles = StyleSheet.create({
   item: {
     padding: 10,
     borderBottomWidth: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
+  textAtention: {
+    color: 'red',
+    fontSize: 10
+  }
 });
