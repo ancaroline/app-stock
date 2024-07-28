@@ -1,4 +1,6 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
 
 const StockContext = createContext();
 
@@ -6,6 +8,32 @@ export const useStock = () => useContext(StockContext);
 
 export const StockProvider = ({ children }) => {
   const [stock, setStock] = useState([]);
+
+  useEffect(() => {
+    async function loadStock(){
+      try {
+        const storedStock = await AsyncStorage.getItem('@stock');
+        if (storedStock !== null) {
+          setStock(JSON.parse(storedStock));
+        }
+      } catch (e) {
+        console.error('Falha em carregar o estoque no AsyncStorage', e);
+      }
+    }
+    loadStock();
+  }, []);
+
+  useEffect(() => {
+    async function saveStock() {
+      try {
+        await AsyncStorage.setItem('@stock', JSON.stringify(stock));
+      } catch (e) {
+        console.error('Falha em salvar o estoque no AsyncStorage', e);
+      }
+    }
+    saveStock();
+  }, [stock]);
+
 
   const updateStock = (itemName, itemQuantity) => {
     const quantity = parseInt(itemQuantity);
