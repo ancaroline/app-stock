@@ -4,6 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useStock } from '../../contexts/StockContext';
 
 export function StockUpdate() {
+  
   const { stock, updateStock, removeItem } = useStock();
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
@@ -82,7 +83,7 @@ export function StockUpdate() {
       Alert.alert('Erro', 'Preço inválido');
       return;
     }
-    
+
     // Ajustando nova quantidade informada
     const adjustedQuantity = parseInt(newQuantity) - selectedItem.quantity;
     updateStock(selectedItem.name, adjustedQuantity, newPrice, newType);
@@ -95,6 +96,8 @@ export function StockUpdate() {
 
   return (
     <View style={styles.container}>
+
+    
       <TextInput
         placeholder="Nome do Item"
         value={itemName}
@@ -266,7 +269,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 15,
     marginLeft: 50,
-    backgroundColor: '#6ED99B'
+    backgroundColor: '#FBB45A'
   },
   updateButtonTextStock: {
     fontSize: 16,

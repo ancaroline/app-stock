@@ -7,6 +7,8 @@ import { AntDesign } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
+
+
 export function Routes(){
     return(
         <Tab.Navigator>
@@ -18,7 +20,7 @@ export function Routes(){
                     headerShown: false,
                     tabBarIcon: ({ focused, size, color }) => {
                         if(focused){
-                            return <AntDesign name="home" size={24} color="orange" />
+                            return <AntDesign name="home" size={24} color="black" />
                         }
                         return <AntDesign name="home" size={24} color="black" />
                     }                   
@@ -28,10 +30,13 @@ export function Routes(){
                 name="Verificação Completa do Estoque"
                 component={StockCheck}
                 options={{
+                    tabBarStyle: {
+                        backgroundColor: "#6ED99B"
+                    },
                     tabBarShowLabel: false,
                     tabBarIcon: ({ focused, size, color }) => {
                         if(focused){
-                            return <AntDesign name="check" size={24} color="orange" />
+                            return <AntDesign name="check" size={24} color="black" />
                         }
                         return <AntDesign name="check" size={24} color="black" />
                     }
@@ -41,10 +46,13 @@ export function Routes(){
                 name="Atualização do Estoque"
                 component={StockUpdate}
                 options={{
+                    tabBarStyle: {
+                        backgroundColor: "#FBB45A",
+                    },
                     tabBarShowLabel: false,
                     tabBarIcon: ({ focused, size, color }) => {
                         if(focused){
-                            return <AntDesign name="edit" size={24} color="orange" />
+                            return <AntDesign name="edit" size={24} color="black" />
                         }
                         return <AntDesign name="edit" size={24} color="black" />
                     }
