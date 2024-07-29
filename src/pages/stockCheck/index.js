@@ -49,6 +49,12 @@ export function StockCheck() {
     return { status, color, moneyNeeded };
   };
 
+  const totalMoneyNeeded = stock.reduce((acc, item) => {
+    const priceUnit = item.totalPrice / item.quantity;
+    const { moneyNeeded } = getStockStatus(item.quantity, item.type, priceUnit);
+    return acc + moneyNeeded;
+  }, 0);
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -67,6 +73,7 @@ export function StockCheck() {
           );
         }}
       />
+      <Text style={styles.textTotalMoney}>Total necessário para repor o estoque: R$ {totalMoneyNeeded.toFixed(2)}</Text>
       <Text style={styles.textAtention}>Atenção! O status saudável não condiz com o total necessário para o mês.</Text>
       <Text style={styles.textAtention}>Saudável = 75% do estoque.</Text>
     </View>
@@ -89,5 +96,12 @@ const styles = StyleSheet.create({
   textAtention: {
     color: 'red',
     fontSize: 10
+  },
+  textTotalMoney: {
+    marginTop: 20,
+    backgroundColor: '#6ED99B',
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'black',
   }
 });
