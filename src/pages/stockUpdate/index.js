@@ -15,7 +15,7 @@ export function StockUpdate() {
   const [newPrice, setNewPrice] = useState('');
   const [newType, setNewType] = useState('');
 
-  const handleUpdateStock = () => {
+  const processUpdateStock = () => {
     if (!itemName) {
       Alert.alert('Erro', 'Nome do item inválido');
       return;
@@ -35,7 +35,7 @@ export function StockUpdate() {
       Alert.alert('Erro', 'Tipo de item inválido');
       return;
     }
-
+    
     updateStock(itemName, itemQuantity, itemPrice, itemType);
 
     setItemName('');
@@ -44,7 +44,7 @@ export function StockUpdate() {
     setItemType('');
   };
 
-  const handleRemoveItem = (name) => {
+  const processRemoveItem = (name) => {
     Alert.alert(
       'Remover Item',
       `Tem certeza que deseja remover o item ${name}?`,
@@ -55,15 +55,16 @@ export function StockUpdate() {
         },
         {
           text: 'Remover',
-          onPress: () => removeItem(name),
+          onPress: () => removeItem(name), // Removendo itens
           style: 'destructive',
         },
       ],
       { cancelable: true }
     );
   };
-
-  const handleUpdateItem = (item) => {
+  
+  // Atualizando itens
+  const processUpdateItem = (item) => {
     setSelectedItem(item);
     setNewQuantity(item.quantity.toString());
     setNewPrice((item.totalPrice / item.quantity).toFixed(2).toString());
@@ -71,7 +72,7 @@ export function StockUpdate() {
     setModalVisible(true);
   };
 
-  const handleSaveQuantity = () => {
+  const processSaveQuantity = () => {
     if (isNaN(parseInt(newQuantity))) {
       Alert.alert('Erro', 'Quantidade inválida');
       return;
@@ -81,9 +82,10 @@ export function StockUpdate() {
       Alert.alert('Erro', 'Preço inválido');
       return;
     }
-
-    const quantityChange = parseInt(newQuantity) - selectedItem.quantity;
-    updateStock(selectedItem.name, quantityChange, newPrice, newType);
+    
+    // Ajustando nova quantidade informada
+    const adjustedQuantity = parseInt(newQuantity) - selectedItem.quantity;
+    updateStock(selectedItem.name, adjustedQuantity, newPrice, newType);
     setModalVisible(false);
     setSelectedItem(null);
     setNewQuantity('');
@@ -123,7 +125,7 @@ export function StockUpdate() {
         <Picker.Item label="Tinta Colorida" value="tinta colorida" />
         <Picker.Item label="Agulha" value="agulha" />
       </Picker>
-      <TouchableOpacity style={styles.updateButtonStock} onPress={handleUpdateStock}>
+      <TouchableOpacity style={styles.updateStockButton} onPress={processUpdateStock}>
         <Text style={styles.updateButtonTextStock}>Atualizar Estoque</Text>
       </TouchableOpacity>
       
@@ -134,10 +136,10 @@ export function StockUpdate() {
           <View style={styles.item}>
             <Text>{item.name}: ({item.quantity} unidades)</Text>
             <View style={styles.buttons}>
-              <TouchableOpacity onPress={() => handleUpdateItem(item)}>
+              <TouchableOpacity onPress={() => processUpdateItem(item)}>
                 <Text style={styles.updateButton}>Atualizar</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleRemoveItem(item.name)}>
+              <TouchableOpacity onPress={() => processRemoveItem(item.name)}>
                 <Text style={styles.removeButton}>Remover</Text>
               </TouchableOpacity>
             </View>
@@ -178,7 +180,7 @@ export function StockUpdate() {
                 <Picker.Item label="Agulha" value="agulha" />
               </Picker>
               <View style={styles.modalButtons}>
-                <TouchableOpacity style={[styles.modalButton, styles.saveButton]} onPress={handleSaveQuantity}>
+                <TouchableOpacity style={[styles.modalButton, styles.saveButton]} onPress={processSaveQuantity}>
                   <Text style={styles.modalButtonText}>Salvar</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={() => setModalVisible(false)}>
@@ -256,7 +258,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  updateButtonStock: {
+  updateStockButton: {
     padding: 10,
     borderRadius: 5,
     justifyContent: 'center',

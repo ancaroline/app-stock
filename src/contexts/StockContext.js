@@ -8,7 +8,8 @@ export const useStock = () => useContext(StockContext);
 
 export const StockProvider = ({ children }) => {
   const [stock, setStock] = useState([]);
-
+  
+  // Carregando estoque com Async Storage
   useEffect(() => {
     async function loadStock() {
       try {
@@ -23,6 +24,7 @@ export const StockProvider = ({ children }) => {
     loadStock();
   }, []);
 
+  // Salvando estoque com Async Storage
   useEffect(() => {
     async function saveStock() {
       try {
@@ -35,8 +37,10 @@ export const StockProvider = ({ children }) => {
   }, [stock]);
 
   const updateStock = (itemName, itemQuantity, itemPrice, itemType) => {
+
     const quantity = parseInt(itemQuantity);
     const price = parseFloat(itemPrice);
+    
     setStock(prevStock => {
       const existingItem = prevStock.find(item => item.name === itemName);
 

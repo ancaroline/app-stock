@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native'
 import Modal from 'react-native-modal';
 import { useStock } from '../../contexts/StockContext';
 
@@ -11,7 +11,9 @@ export function Home(){
   const [stockMessage, setStockMessage] = useState('');
 
   function checkStock(){
-    let criticalItems = stock.filter(item => item.quantity < 10);
+
+    let criticalItems = stock.filter(item => item.quantity < 10); //Nova array que retorna itens com a quantidade menor que 10.
+
     if (criticalItems.length > 0) {
       let message = 'Você tem um ou mais itens acabando!\n\n';
       criticalItems.forEach(item => {
@@ -38,7 +40,6 @@ export function Home(){
         <TouchableOpacity style={styles.button} onPress={checkStock}>
           <Text style={styles.buttonText}>Verificar Estoque</Text>
         </TouchableOpacity>
-      
         
         <Modal isVisible={isModalVisible} onBackdropPress={closeModal}>
         <View style={styles.modalContainer}>

@@ -32,6 +32,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "af3f18e1-6a5d-4ab6-a2a9-c9c1d277ab52"
+      }
+    },
+    "owner": "ancaroline"
   }
 }

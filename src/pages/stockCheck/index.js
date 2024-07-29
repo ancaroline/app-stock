@@ -5,7 +5,8 @@ import { useStock } from '../../contexts/StockContext';
 export function StockCheck() {
   const { stock } = useStock();
 
-  const getStockStatus = (quantity, type, priceUnit) => {
+  // Valores para Saudável, Neutro e Crítico
+  const calculateStockStatus = (quantity, type, priceUnit) => {
     let healthyStock, neutralStock, criticalStock;
     switch (type) {
       case 'cartucho':
@@ -49,9 +50,10 @@ export function StockCheck() {
     return { status, color, moneyNeeded };
   };
 
+  // Calculando valor necessário para repor o estoque
   const totalMoneyNeeded = stock.reduce((acc, item) => {
     const priceUnit = item.totalPrice / item.quantity;
-    const { moneyNeeded } = getStockStatus(item.quantity, item.type, priceUnit);
+    const { moneyNeeded } = calculateStockStatus(item.quantity, item.type, priceUnit);
     return acc + moneyNeeded;
   }, 0);
 
@@ -62,7 +64,7 @@ export function StockCheck() {
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => {
           const priceUnit = item.totalPrice / item.quantity;
-          const { status, color, moneyNeeded } = getStockStatus(item.quantity, item.type, priceUnit);
+          const { status, color, moneyNeeded } = calculateStockStatus(item.quantity, item.type, priceUnit);
           return (
             <View style={[styles.item, { borderColor: color }]}>
               <Text>{item.name}: {item.quantity} ({status}) - Total: R$ {item.totalPrice.toFixed(2)}</Text>
