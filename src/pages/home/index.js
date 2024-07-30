@@ -7,27 +7,26 @@ export function Home(){
   const localImage = require("../../assets/cover.png")
 
   const { stock } = useStock();
-  const [isModalVisible, setModalVisible] = useState(false);
   const [stockMessage, setStockMessage] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
+  
 
   function checkStock(){
-
-    let criticalItems = stock.filter(item => item.quantity < 10); //Nova array que retorna itens com a quantidade menor que 10.
-
-    if (criticalItems.length > 0) {
-      let message = 'Você tem um ou mais itens acabando!\n\n';
-      criticalItems.forEach(item => {
+    let criticalStock = stock.filter(item => item.quantity < 10); //Filtrando itens recebidos do context que podem entrar na variável criticalStock
+    if (criticalStock.length > 0) {
+      //Se criticalStock possuir algum item, a mensagem é enviada e calculado o valor de quanto é necessário para atingir o nível neutro.
+      let messageAlert = 'Você tem um ou mais itens acabando!\n\n'; 
+      
+      criticalStock.forEach(item => {
         let neededQuantity = 10 - item.quantity;
-        message += `- ${item.name}: Necessário ${neededQuantity} unidade(s) para atingir o nível neutro.\n\n`;
+        messageAlert += `- ${item.name}: Necessário ${neededQuantity} unidade(s) para atingir o nível neutro.\n\n`;
       });
-      setStockMessage(message);
+      setStockMessage(messageAlert);
     } else {
       setStockMessage('Está tudo em ordem.');
     }
     setModalVisible(true);
   }
-
-
   function closeModal() {
     setModalVisible(false);
   }
@@ -35,21 +34,21 @@ export function Home(){
   return(
       <ImageBackground source={localImage} style={styles.container}>
 
-        <Text style={styles.title}>FIERCE TATTOARIA</Text>
+        <Text style={styles.name}>FIERCE TATTOARIA</Text>
 
         <TouchableOpacity style={styles.button} onPress={checkStock}>
           <Text style={styles.buttonText}>Verificar Estoque</Text>
         </TouchableOpacity>
         
         <Modal isVisible={isModalVisible} onBackdropPress={closeModal}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Status do Estoque</Text>
-          <Text style={styles.modalMessage}>{stockMessage}</Text>
-          <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-            <Text style={styles.closeButtonText}>Fechar</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Status do Estoque</Text>
+            <Text style={styles.modalMessage}>{stockMessage}</Text>
+            <TouchableOpacity style={styles.closeButtonModal} onPress={closeModal}>
+              <Text style={styles.closeButtonText}>Fechar</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
 
       </ImageBackground>
   )
@@ -62,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  title:{
+  name:{
     color: "white",
     fontSize: 35,
     marginBottom: 15,
@@ -86,6 +85,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  closeButtonModal: {
+    backgroundColor: '#D2691E',
+    padding: 10,
+    borderRadius: 5
+  },
+  closeButtonText: {
+    color: 'white',
+    fontWeight: 'bold'
+  },
   modalContainer: {
     backgroundColor: 'white',
     padding: 20,
@@ -100,14 +108,5 @@ const styles = StyleSheet.create({
   modalMessage: {
     fontSize: 16,
     marginBottom: 20,
-  },
-  closeButton: {
-    backgroundColor: '#D2691E',
-    padding: 10,
-    borderRadius: 5
-  },
-  closeButtonText: {
-    color: 'white',
-    fontWeight: 'bold'
   }
 })

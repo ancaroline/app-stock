@@ -7,9 +7,10 @@ const StockContext = createContext();
 export const useStock = () => useContext(StockContext);
 
 export const StockProvider = ({ children }) => {
+  
   const [stock, setStock] = useState([]);
   
-  // Carregando estoque com Async Storage
+  // Carregando estoque
   useEffect(() => {
     async function loadStock() {
       try {
@@ -23,8 +24,7 @@ export const StockProvider = ({ children }) => {
     }
     loadStock();
   }, []);
-
-  // Salvando estoque com Async Storage
+  // Salvando estoque
   useEffect(() => {
     async function saveStock() {
       try {
