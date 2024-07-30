@@ -4,22 +4,23 @@
     "slug": "app-stock",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/fierce.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/fierce-splash1.png",
       "resizeMode": "cover",
-      "backgroundColor": "##D2691E"
+      "backgroundColor": "#D2691E"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/fierce.png",
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ancaroline.appstock"
     },
     "web": {
       "bundler": "metro",

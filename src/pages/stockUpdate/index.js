@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, Alert, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, TextInput, FlatList, StyleSheet, Alert, TouchableOpacity, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useStock } from '../../contexts/StockContext';
 
@@ -105,7 +105,7 @@ export function StockUpdate() {
         style={styles.input}
       />
       <TextInput
-        placeholder="Unidades (positivo para adicionar, negativo para remover)"
+        placeholder="Unidades"
         value={itemQuantity}
         onChangeText={setItemQuantity}
         keyboardType="numeric"
