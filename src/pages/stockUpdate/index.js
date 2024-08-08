@@ -127,6 +127,9 @@ export function StockUpdate() {
         <Picker.Item label="Cartucho" value="cartucho" />
         <Picker.Item label="Tinta Colorida" value="tinta colorida" />
         <Picker.Item label="Agulha" value="agulha" />
+        <Picker.Item label="Agulha Americana Piercing" value="agulha americana" />
+        <Picker.Item label="Luva Cirúrgica" value="luva cirurgica" />
+        <Picker.Item label="Luva Nitrílica M" value="luva nitrilica" />
       </Picker>
       <TouchableOpacity style={styles.updateStockButton} onPress={processUpdateStock}>
         <Text style={styles.updateButtonTextStock}>Atualizar Estoque</Text>

@@ -29,6 +29,21 @@ export function StockCheck() {
         neutralStock = 11;
         criticalStock = 8;
         break;
+      case 'luva cirurgica':
+        healthyStock = 22;
+        neutralStock = 15;
+        criticalStock = 9;
+        break;
+      case 'luva nitrilica':
+        healthyStock = 8;
+        neutralStock = 5;
+        criticalStock = 3;
+        break;
+        case 'agulha americana':
+        healthyStock = 15;
+        neutralStock = 10;
+        criticalStock = 5;
+        break;
     }
 
     let status, color, moneyNeeded = 0;
